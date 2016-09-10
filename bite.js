@@ -55,8 +55,8 @@
 		body = (body || body === 0 ? body + `` : ``);
 		body = preserve_whitespace ? body.replace(newline_regexp, `\\n`) : body.replace(whitespace_regexp, ` `);
 
-		const deps      = {};
-		let deps_string = ``;
+		const deps_map = {};
+		let deps       = ``;
 
 		for(let helper in helpers) {
 			const begin  = helpers[helper].begin;
@@ -71,15 +71,15 @@
 			else if(end && begins < ends)
 				throw new Error(`Dangling /${helper}`);
 
-			helpers[helper].deps.forEach((dep) => deps[dep] = true);
+			helpers[helper].deps.forEach((dep) => deps_map[dep] = true);
 			body = body.replace(begin.pattern, begin.replace);
 			end && (body = body.replace(end.pattern, end.replace));
 		}
 
-		for(let dep in deps)
-			deps_string += `,${dep}=${vars[dep]}`;
+		for(let dep in deps_map)
+			deps += `,${dep}=${vars[dep]}`;
 
-		body = (begin_fn + deps_string + `;` + concat + body + end_concat + end_fn).replace(empty_regexp, ``).replace(semi_regexp, `}`);
+		body = (begin_fn + deps + `;` + concat + body + end_concat + end_fn).replace(empty_regexp, ``).replace(semi_regexp, `}`);
 
 		const template = new Function(`$`, body);
 		template.toString = () => `$=>{${body}}`;
