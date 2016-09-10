@@ -3,42 +3,44 @@
 	typeof define === `function` && define.amd ? define(() => exports) :
 	this[`Bite`] = exports;
 })(() => {
-	let helpers            = {};
-	let interpolate_regexp = /{{([^{]+)}}/gi;
-	let escape_regexp      = /([.*+?^=!:${}()|[\]\/\\])/g;
-	let whitespace_regexp  = /\s+/g;
-	let newline_regexp     = /\r?\n/g;
-	let empty_regexp       = /p\._\+='';/g;
-	let semi_regexp        = /;}/g;
-	let begin              = `let _,p={_:''};`;
-	let end                = `return p._`;
-	let concat             = `p._+='`;
-	let end_concat         = `';`;
+	const helpers            = {};
+	const interpolate_regexp = /{{([^#\/][^{]*)}}/gi;
+	const escape_regexp      = /([.*+?^=!:${}()|[\]\/\\])/g;
+	const whitespace_regexp  = /\s+/g;
+	const newline_regexp     = /\r?\n/g;
+	const empty_regexp       = /o\+='';/g;
+	const semi_regexp        = /;}/g;
+	const begin_fn           = `let o='',_`;
+	const concat             = `o+='`;
+	const end_concat         = `';`;
+	const end_fn             = `return o`;
 
-	let fns = {
-		e : `$=>{return'&<>="\`\\''.split('').map(_=>$=$.replace(new RegExp(_,'g'),'&#'+_.charCodeAt(0)+';')),$}`, // Escape
+	const vars = {
 		s : `$=>$||$===0?$+'':''`, // String
 		c : `()=>{$._=_;_=$}`, // Child scope
-		a : `$=>{p._+=$}`, // Append HTML
 		p : `()=>{$=_;_=$._;$._=void 0}`, // Parent scope
+		e : `$=>{return $=$||$===0?$+'':'','&<>="\`\\''.split('').map(_=>$=$.replace(new RegExp(_,'g'),'&#'+_.charCodeAt(0)+';')),$}`, // Escape
+		f : `'forEach'`,
 	};
 
 	[
-		[``,       params => `p.a(p.e(p.s(${params})));`],
-		[`unsafe`, params => `p.a(p.s(${params}));`],
-		[`if`,     params => `if(${params}){`, `}`],
-		[`elseif`, params => `}else if(${params}){`],
-		[`else`,   params => `}else{`],
-		[`each`,   params => `p.c();${params}.forEach($=>{`, `});p.p();`],
-		[`with`,   params => `p.c();$=${params};`, `p.p();`],
+		[``,       [`e`],           params => `o+=e(${params});`],
+		[`!`,      [`s`],           params => `o+=s(${params});`],
+		[`if`,     [],              params => `if(${params}){`, `}`],
+		[`elseif`, [],              params => `}else if(${params}){`],
+		[`else`,   [],              params => `}else{`],
+		[`each`,   [`c`, `f`, `p`], params => `c();${params}[f]($=>{`, `});p();`],
+		[`with`,   [`c`, `p`],      params => `c();$=${params};`, `p();`],
 	].forEach(definition => helper.apply(null, definition));
 
-	function helper(helper, begin, end) {
-		let clean_helper =  helper.replace(escape_regexp, `\\$&`);
+	function helper(helper, deps, begin, end) {
+		const clean_helper = helper.replace(escape_regexp, `\\$&`);
+		const prefix       = helper && helper !== `!` ? `#` : ``;
 
 		helpers[helper] = {
+			deps : deps,
 			begin : begin ? {
-				pattern : helper ? new RegExp(`{{#${clean_helper}(?:\\s+(.*?))?\\s*}}`, `gi`) : interpolate_regexp,
+				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:\\s+((?:.(?!{{))*[^{}]))?\\s*}}`, `gi`) : interpolate_regexp,
 				replace : (match, params) => end_concat + begin(params) + concat,
 			} : null,
 			end : end ? {
@@ -52,28 +54,35 @@
 		body = (body || body === 0 ? body + `` : ``);
 		body = preserve_whitespace ? body.replace(newline_regexp, `\\n`) : body.replace(whitespace_regexp, ` `);
 
+		const deps      = {};
+		let deps_string = ``;
+
 		for(let helper in helpers) {
-			let begin = helpers[helper].begin;
-			let end   = helpers[helper].end;
+			const begin  = helpers[helper].begin;
+			const end    = helpers[helper].end;
+			const begins = (body.match(begin.pattern) || ``).length;
+			const ends   = (end && body.match(end.pattern) || ``).length;
 
+			if(!begins)
+				continue;
+
+			if(end)
+				if(begins > ends)
+					throw new Error(`Unclosed #${helper}`);
+				else if(begins < ends)
+					throw new Error(`Dangling /${helper}`);
+
+			helpers[helper].deps.forEach((dep) => deps[dep] = true);
 			body = body.replace(begin.pattern, begin.replace);
-
-			if(end) {
-				body = body.replace(end.pattern, end.replace);
-			}
+			end && (body = body.replace(end.pattern, end.replace));
 		}
 
-		let lib = ``;
+		for(let dep in deps)
+			deps_string += `,${dep}=${vars[dep]}`;
 
-		for(let i in fns) {
-			if(body.indexOf(`p.${i}(`) !== -1) {
-				lib += `p.${i}=${fns[i]};`;
-			}
-		}
+		body = (begin_fn + deps_string + `;` + concat + body + end_concat + end_fn).replace(empty_regexp, ``).replace(semi_regexp, `}`);
 
-		body = (begin + lib + concat + body + end_concat + end).replace(empty_regexp, ``).replace(semi_regexp, '}');
-
-		let template = new Function(`$`, body);
+		const template = new Function(`$`, body);
 		template.toString = () => `$=>{${body}}`;
 
 		return template;
