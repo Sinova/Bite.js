@@ -4,7 +4,7 @@
 	this[`Bite`] = exports;
 })(() => {
 	const helpers            = {};
-	const interpolate_regexp = /{{([^#\/][^{]*)}}/gi;
+	const interpolate_regexp = /{{([^#\/][^{}]*)}}/gi;
 	const escape_regexp      = /([.*+?^=!:${}()|[\]\/\\])/g;
 	const whitespace_regexp  = /\s+/g;
 	const newline_regexp     = /\r?\n/g;
@@ -20,7 +20,7 @@
 		c : `()=>{$._=_;_=$}`, // Child scope
 		p : `()=>{$=_;_=$._;$._=void 0}`, // Parent scope
 		e : `$=>{return $=$||$===0?$+'':'','&<>="\`\\''.split('').map(_=>$=$.replace(new RegExp(_,'g'),'&#'+_.charCodeAt(0)+';')),$}`, // Escape
-		f : `'forEach'`,
+		f : `'forEach'`, // forEach alias
 	};
 
 	[
@@ -40,8 +40,8 @@
 		helpers[helper] = {
 			deps : deps,
 			begin : begin ? {
-				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:\\s+((?:.(?!{{))*[^{}]))?\\s*}}`, `gi`) : interpolate_regexp,
-				replace : (match, params) => end_concat + begin(params) + concat,
+				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:\\s+([^{}]+))?\\s*}}`, `gi`) : interpolate_regexp,
+				replace : (match, params) => end_concat + begin(params || null) + concat,
 			} : null,
 			end : end ? {
 				pattern : new RegExp(`{{/${clean_helper}}}`, `gi`),
