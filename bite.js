@@ -3,24 +3,23 @@
 	typeof define === `function` && define.amd ? define(() => exports) :
 	this[`Bite`] = exports;
 })(() => {
-	let helpers           = {};
-	let escape_html       = [`&/g,'&amp`, `</g,'&lt`, `>/g,'&gt`, `"/g,'&quot`, `'/g,'&#x27`, `\`/g,'&#x60`, `=/g,'&#x3D`].join(`')[_](/`);
-	let escape_regexp     = /([.*+?^=!:${}()|[\]\/\\])/g;
-	let whitespace_regexp = /\s+/g;
-	let newline_regexp    = /\r?\n/g;
-	let left_tag_regexp   = />\s+/g;
-	let right_tag_regexp  = /\s+</g;
-	let empty_regexp      = /p\._\+='';/g;
-	let begin             = `let _,p={_:''};`;
-	let end               = `return p._`;
-	let concat            = `p._+='`;
-	let end_concat        = `';`;
+	let helpers            = {};
+	let interpolate_regexp = /{{([^{]+)}}/gi;
+	let escape_regexp      = /([.*+?^=!:${}()|[\]\/\\])/g;
+	let whitespace_regexp  = /\s+/g;
+	let newline_regexp     = /\r?\n/g;
+	let empty_regexp       = /p\._\+='';/g;
+	let semi_regexp        = /;}/g;
+	let begin              = `let _,p={_:''};`;
+	let end                = `return p._`;
+	let concat             = `p._+='`;
+	let end_concat         = `';`;
 
 	let fns = {
-		a : `_=>{p._+=_}`, // Append HTML
-		s : `$=>!$&&$!==0?'':$+''`, // String
-		e : `$=>{let _='replace';return $[_](/${escape_html}')}`, // Escape
+		e : `$=>{return'&<>="\`\\''.split('').map(_=>$=$.replace(new RegExp(_,'g'),'&#'+_.charCodeAt(0)+';')),$}`, // Escape
+		s : `$=>$||$===0?$+'':''`, // String
 		c : `()=>{$._=_;_=$}`, // Child scope
+		a : `$=>{p._+=$}`, // Append HTML
 		p : `()=>{$=_;_=$._;$._=void 0}`, // Parent scope
 	};
 
@@ -39,20 +38,19 @@
 
 		helpers[helper] = {
 			begin : begin ? {
-				pattern : new RegExp(`{{#${clean_helper}(?:\\s+(.*?))?\\s*}}`, `gi`),
+				pattern : helper ? new RegExp(`{{#${clean_helper}(?:\\s+(.*?))?\\s*}}`, `gi`) : interpolate_regexp,
 				replace : (match, params) => end_concat + begin(params) + concat,
 			} : null,
 			end : end ? {
 				pattern : new RegExp(`{{/${clean_helper}}}`, `gi`),
-				replace : end_concat + end + concat,
+				replace : () => end_concat + end + concat,
 			} : null,
 		};
 	}
 
 	function compile(body, preserve_whitespace) {
-		body = (!body && body !== 0 ? `` : body + ``);
-		body = preserve_whitespace ? body.replace(newline_regexp, `\\n`) :
-			body.replace(whitespace_regexp, ` `).replace(left_tag_regexp, `>`).replace(right_tag_regexp, `<`);
+		body = (body || body === 0 ? body + `` : ``);
+		body = preserve_whitespace ? body.replace(newline_regexp, `\\n`) : body.replace(whitespace_regexp, ` `);
 
 		for(let helper in helpers) {
 			let begin = helpers[helper].begin;
@@ -73,7 +71,7 @@
 			}
 		}
 
-		body = (begin + lib + concat + body + end_concat + end).replace(empty_regexp, ``);
+		body = (begin + lib + concat + body + end_concat + end).replace(empty_regexp, ``).replace(semi_regexp, '}');
 
 		let template = new Function(`$`, body);
 		template.toString = () => `$=>{${body}}`;
