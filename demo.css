@@ -1,0 +1,263 @@
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+html {
+	box-sizing: border-box;
+	min-width: 400px;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	background: #FFF;
+	font-family: Arial, sans-serif;
+	font-size: 20px;
+}
+
+body {
+	margin: 0;
+	min-width: 100%;
+	min-height: 100%;
+}
+
+img {
+	border: 0;
+}
+
+a {
+	color: #710069;
+	text-decoration: underline;
+}
+
+p {
+	margin: 0 0 1rem;
+}
+
+.code-block {
+	display: block;
+	padding: 0.5rem;
+	background: #333;
+	color: #FFF;
+	font-family: monospace;
+	white-space: pre;
+	tab-size: 2;
+}
+
+/* =============================================================================
+/* Header
+/* ========================================================================== */
+
+.page-header {
+	display: block;
+	width: 100%;
+	padding: 1rem 1rem 1.5rem;
+	background: #323232 url(bg.png);
+	color: #EEEEEE;
+	text-align: center;
+	font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+
+.page-title {
+	margin: 0;
+	font-size: 3.5rem;
+	font-weight: bold;
+}
+
+.page-subtitle {
+	margin: 0.5rem 0 0;
+	font-size: 1.2rem;
+	font-weight: normal;
+}
+
+.buttons {
+	margin-top: 1.5rem;
+}
+
+.button {
+	display: inline-block;
+	padding: 1rem 1rem;
+	border: 1px solid;
+	color: #EEEEEE;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.icon {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+	width: 24px;
+	height: 24px;
+}
+
+.github-button {
+	border-color: #6D2167;
+	background: #52014C;
+}
+
+.github-button:hover {
+	border-color: #863380;
+	background: #710069;
+}
+
+/* =============================================================================
+/* Content
+/* ========================================================================== */
+
+.page-content {
+	display: block;
+	margin: 0 auto;
+	padding: 0 1rem;
+	max-width: 1000px;
+	text-align: left;
+}
+
+.section-title {
+	margin: 1rem 0;
+	color: #963A90;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+/* =============================================================================
+/* Intro
+/* ========================================================================== */
+
+.summary-text {
+	margin-left: 1rem;
+}
+
+.feature-list {
+	margin: 0;
+	list-style: none;
+	font-size: 1rem;
+}
+
+.feature-list li {
+	margin-bottom: 0.5rem;
+}
+
+.feature-list li:before {
+	content: '';
+	display: inline-block;
+	vertical-align: middle;
+	margin: -0.2rem 0.5rem 0 0;
+	width: 0.4rem;
+	height: 0.4rem;
+	background: #52014C;
+}
+
+/* =============================================================================
+/* Install
+/* ========================================================================== */
+
+.install {
+	margin-bottom: 1rem;
+}
+
+.install .code-block {
+	margin-left: 1rem;
+	padding: 1rem;
+}
+
+.install .code-block:before {
+	content: '$';
+	margin-right: 0.5rem;
+}
+
+/* =============================================================================
+/* Demo
+/* ========================================================================== */
+
+.demo-text {
+	margin: 0 0 1rem 1rem;
+}
+
+.demo-section {
+	margin: 0 0 1rem 1rem;
+}
+
+.demo-input {
+	display: flex;
+}
+
+.demo-input textarea {
+	width: 100%;
+	height: 15rem;
+	border: 1px solid #963A90;
+	resize: none;
+}
+
+.demo-template-container {
+	width: 18rem;
+}
+
+.demo-js-container {
+	flex-grow: 1;
+}
+
+.demo-title {
+	margin: 0;
+	padding: 0.5rem;
+	background: #963A90;
+	color: #FFF;
+	font-weight: bold;
+}
+
+#demo-output {
+	padding: 0.5rem;
+	height: 10rem;
+	border: 1px solid #963A90;
+	overflow: auto;
+}
+
+#demo-output.error {
+	color: #F00;
+}
+
+/* =============================================================================
+/* API
+/* ========================================================================== */
+
+.api-container {
+	margin: 0 0 2rem 1rem;
+}
+
+.api-title {
+	margin: 0;
+	padding: 0.5rem;
+	background: #963A90;
+	color: #FFF;
+}
+
+.api-content {
+	display: flex;
+	border: 1px solid #963A90;
+	background: #FFF;
+	font-size: 0.75rem;
+}
+
+.api-description {
+	flex-grow: 1;
+	padding: 0.5rem;
+	font-size: 1.1rem;
+}
+
+.api-syntax {
+	flex-shrink: 0;
+	margin-right: 1rem;
+	width: 14rem;
+}
+
+.api-variables {
+	margin: 1rem;
+}
+
+.api code {
+	display: inline-block;
+	padding: 0.25rem;
+	margin: 1px;
+	background: #CCC;
+	font-size: 0.8rem;
+}
