@@ -57,14 +57,17 @@
 			const begins = (body.match(begin.pattern) || ``).length;
 			const ends   = (end && body.match(end.pattern) || ``).length;
 
+			if(end) {
+				if(begins > ends) {
+					throw new Error(`Unclosed {{#${helper}}}`);
+				}
+				else if(begins < ends) {
+					throw new Error(`Unexpected {{/${helper}}}`);
+				}
+			}
+
 			if(!begins) {
 				continue;
-			}
-			else if(end && begins > ends) {
-				throw new Error(`Unclosed {{#${helper}}}`);
-			}
-			else if(end && begins < ends) {
-				throw new Error(`Unexpected {{/${helper}}}`);
 			}
 
 			helpers[helper].deps.forEach((dep) => deps_map[dep] = true);
