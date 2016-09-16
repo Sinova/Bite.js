@@ -57,21 +57,26 @@
 			const begins = (body.match(begin.pattern) || ``).length;
 			const ends   = (end && body.match(end.pattern) || ``).length;
 
-			if(!begins)
+			if(!begins) {
 				continue;
-			else if(end && begins > ends)
+			}
+			else if(end && begins > ends) {
 				throw new Error(`Unclosed {{#${helper}}}`);
-			else if(end && begins < ends)
+			}
+			else if(end && begins < ends) {
 				throw new Error(`Unexpected {{/${helper}}}`);
+			}
 
 			helpers[helper].deps.forEach((dep) => deps_map[dep] = true);
 			body = body.replace(begin.pattern, begin.replace);
 			end && (body = body.replace(end.pattern, end.replace));
 		}
 
-		for(let dep in utilities)
-			if(deps_map[dep])
+		for(let dep in utilities) {
+			if(deps_map[dep]) {
 				deps += utilities[dep] ? `,${dep}=${utilities[dep]}` : `,${dep}`;
+			}
+		}
 
 		body = (`let $$,o=''${deps};${concat}${body}${end_concat}return o`).replace(/o\+='';/g, ``).replace(/;}/g, `}`);
 
