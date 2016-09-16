@@ -210,16 +210,10 @@
 
 						<div class="api-description">
 							The <code>{{#repeat &lt;number&gt;}} ... {{/repeat}}</code> block allows you to repeat a
-							subsection of the template a given number of times.
-
-							The following variables are accessible inside the block:
-
-							<table class="api-variables">
-								<tr>
-									<th><code>i</code></th>
-									<td>The current index (starting with 0)</td>
-								</tr>
-							</table>
+							subsection of the template a given number of times. Within the block, <code>i</code> becomes
+							the current index in the array. <code>#repeat</code> behaves like a standard
+							<code>for</code> loop, starting with 0 and counting up to, but not including, the target
+							number.
 						</div>
 					</div>
 				</section>
