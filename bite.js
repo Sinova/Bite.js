@@ -62,7 +62,7 @@
 			else if(end && begins > ends)
 				throw new Error(`Unclosed {{#${helper}}}`);
 			else if(end && begins < ends)
-				throw new Error(`Dangling {{/${helper}}}`);
+				throw new Error(`Unexpected {{/${helper}}}`);
 
 			helpers[helper].deps.forEach((dep) => deps_map[dep] = true);
 			body = body.replace(begin.pattern, begin.replace);
