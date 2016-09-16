@@ -72,7 +72,10 @@
 
 			helpers[helper].deps.forEach((dep) => deps_map[dep] = true);
 			body = body.replace(begin.pattern, begin.replace);
-			end && (body = body.replace(end.pattern, end.replace));
+
+			if(end) {
+				body = body.replace(end.pattern, end.replace);
+			}
 		}
 
 		for(let dep in utilities) {
