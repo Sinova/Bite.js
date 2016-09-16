@@ -1,6 +1,6 @@
 ((exports) => {
 	typeof module !== `undefined` && module.exports ? module.exports = exports() :
-	typeof define === `function` && define.amd ? define(() => exports()) :
+	typeof define === `function` && define.amd ? define(exports) :
 	this[`Bite`] = exports();
 })(() => {
 	const helpers    = {};
