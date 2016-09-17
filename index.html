@@ -87,7 +87,7 @@
 							&lt;/h1&gt;
 
 							&lt;div&gt;
-								{{$.star_partial({max : $.rating})}}
+								{{!$.star_partial({max : $.rating})}}
 							&lt;/div&gt;
 
 							&lt;div&gt;
@@ -99,7 +99,6 @@
 									{{$.name}} ({{$.years}} years)
 								{{/with}}
 							&lt;/div&gt;
-
 
 							&lt;div&gt;
 								&lt;h2&gt;
@@ -177,14 +176,20 @@
 					<div class="api-content">
 						<code class="api-syntax code-block">
 							{{&lt;expression&gt;}}
+							{{!&lt;html_expression&gt;}}
 						</code>
 
 						<div class="api-description">
-							Interpolation allows you to inject arbitrary values and expressions into your template. The
-							most common use-case is outputting a property such as a name or date, e.g.
-							<code>{{$.name}}</code>. However, any valid JavaScript expression is allowed, such as
-							<code>{{1 + 2 + 3}}</code>, <code>{{'Mr. ' + $.last_name}}</code>, or
-							<code>{{$.name.toUpperCase()}}</code>.
+							Interpolation allows you to inject arbitrary values and expressions into your template via
+							<code>{{&lt;expression&gt;}}</code>. The most common use-case is outputting a property such
+							as a name or date, e.g. <code>{{$.name}}</code>. However, any valid JavaScript expression is
+							allowed, such as <code>{{1 + 2 + 3}}</code>, <code>{{'Mr. ' + $.last_name}}</code>, or
+							<code>{{$.name.toUpperCase()}}</code>.<br>
+							<br>
+							Interpolated values are HTML-escaped by default. If you want to iterpolate a value with HTML
+							without escaping, use <code>{{!&lt;expression&gt;}}</code>. This is particularly useful when
+							using partials. Use this cautiously, however, as interpolating unsafe strings such as user
+							input can lead to JavaScript injection attacks.
 						</div>
 					</div>
 
@@ -296,7 +301,7 @@
 
 					<div class="api-content">
 						<code class="api-syntax code-block">
-							{{$.my_partial($.my_data)}}
+							{{!$.my_partial($.my_data)}}
 						</code>
 
 						<div class="api-description">
@@ -304,6 +309,9 @@
 							arbitrary expressions. Thus, using a partial is as
 							simple as passing its precompiled function into your
 							template and calling it with your desired data.
+							Because most partials contain HTML, use the
+							unescaped interpolation syntax
+							<code>{{!&lt;expression&gt;}}</code>.
 						</div>
 					</div>
 				</section>
