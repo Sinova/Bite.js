@@ -54,4 +54,4 @@ The `{{#with <expression>}} ... {{/with}}` block allows you to change the curren
 
 #### Partials
 
-Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. See the [demo](https://sinova.github.io/Bite.js/) for a good example.
+Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. See the [demo](https://sinova.github.io/Bite.js/#demo) for a good example.
