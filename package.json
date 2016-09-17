@@ -1,6 +1,6 @@
 {
   "name": "bite-templates",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tiny, Dependecy-Free JavaScript Templating",
   "main": "bite.js",
   "repository": {
