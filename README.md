@@ -3,7 +3,7 @@
 
 ### Overview
 
-Bite.js is an ultra light-weight, full-featured templating engine designed for size and performance. It produces standalone functions in vanilla JavaScript that can be used to render a template with a given set of data.
+Bite.js is an ultra light-weight, full-featured templating engine designed for size and performance. It compiles templates into standalone functions in vanilla JavaScript that can be used to render the template with a given set of data.
 
 ### Features
 
@@ -24,9 +24,9 @@ npm install bite-templates
 
 > Check out the [demo](https://sinova.github.io/Bite.js/#demo) for a usage example.
 
-Bite.js generates standalone functions from your templates by calling `Bite(<template_string>)`. The template string can come from any source, such as a file, ajax call, string literal, or user input.
+Use Bite.js to compile templates into standalone functions by calling `Bite(<template_string>)`. The template string can come from any source, such as a file, ajax call, string literal, or user input.
 
-The resulting function can then be called with a data contex which will render the template with the data as the current **scope**. Within the template, the current **scope** is always accessible via the `$` variable. For instance, if your data looks like `{name : 'Sam'}`, your template can access that variable with `$.name` and can perform actions on it such as interpolation.
+The functions can then be called with a data contex with which to evaluate the template. The result is an HTML string. Within the template, the current context, or **scope**, is always accessible via the `$` variable. For instance, if your data looks like `{name : 'Sam'}`, your template can access that variable with `$.name` and can perform actions on it such as interpolation.
 
 Template functions can be stored by calling their `toString()` method and saving the resulting string however you wish (file, DB, etc). If you're using Webpack, you can use the [bite-templates-loader](https://github.com/Sinova/bite-templates-loader) package to automatically precompile your templates before sending them to the client.
 
