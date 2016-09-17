@@ -25,8 +25,8 @@
 		let template = demo_template.value;
 		let js       = demo_js.value;
 
-		try {
 			window.eval(js);
+		try {
 			demo_output.classList.remove('error');
 		}
 		catch(e) {

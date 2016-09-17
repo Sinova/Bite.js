@@ -16,14 +16,14 @@
 	};
 
 	[
-		[``,       [`e`, `s`], params => `o+=e(s(${params}));`],
-		[`!`,      [`s`],      params => `o+=s(${params});`],
-		[`if`,     [],         params => `if(${params}){`, `}`],
-		[`elseif`, [],         params => `}else if(${params}){`],
-		[`else`,   [],         params => `}else{`],
-		[`repeat`, [`r`],      params => `r(${params}).forEach((i)=>{`, `});`],
-		[`each`,   [`c`, `p`], params => `c();${params}.forEach(($,i)=>{`, `});p();`],
-		[`with`,   [`c`, `p`], params => `c();$=${params};`, `p();`],
+		[``,        [`e`, `s`], params => `o+=e(s(${params}));`],
+		[`!`,       [`s`],      params => `o+=s(${params});`],
+		[`if`,      [],         params => `if(${params}){`, `}`],
+		[`elseif`,  [],         params => `}else if(${params}){`],
+		[`else`,    [],         params => `}else{`],
+		[`repeat`,  [`r`],      params => `r(${params}).forEach((i)=>{`, `});`],
+		[`forEach`, [`c`, `p`], params => `c();${params}.forEach(($,i)=>{`, `});p();`],
+		[`with`,    [`c`, `p`], params => `c();$=${params};`, `p();`],
 	].forEach(definition => helper.apply(null, definition));
 
 	function helper(helper, deps, begin, end) {
@@ -34,7 +34,7 @@
 		helpers[helper] = {
 			deps : deps,
 			begin : {
-				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:${space}([^{}]+))?\\s*}}`, `gi`) : /{{\s*([^#\/!][^{}]*)\s*}}/g,
+				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`) : /{{\s*([^#\/!].*?)\s*}}(?!})/g,
 				replace : (match, params) => end_concat + begin(params ? params.replace(/\\'/g, `'`) : null) + concat,
 			},
 			end : end ? {

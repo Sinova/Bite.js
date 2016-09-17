@@ -34,13 +34,24 @@ p {
 	margin: 0 0 1rem;
 }
 
+code {
+	display: inline-block;
+	margin: 1px;
+	padding: 0.25rem;
+	background: #CCC;
+	font-size: 0.8rem;
+	white-space: pre;
+	tab-size: 2;
+}
+
 .code-block {
 	display: block;
+	margin: 0;
 	padding: 0.5rem;
 	background: #333;
 	color: #FFF;
+	font-size: 0.65rem;
 	font-family: monospace;
-	white-space: pre;
 	tab-size: 2;
 }
 
@@ -159,6 +170,7 @@ p {
 .install .code-block {
 	margin-left: 1rem;
 	padding: 1rem;
+	font-size: 1rem;
 }
 
 .install .code-block:before {
@@ -252,12 +264,4 @@ p {
 
 .api-variables {
 	margin: 1rem;
-}
-
-.api code {
-	display: inline-block;
-	padding: 0.25rem;
-	margin: 1px;
-	background: #CCC;
-	font-size: 0.8rem;
 }
