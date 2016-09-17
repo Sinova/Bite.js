@@ -24,8 +24,8 @@
 
 				<div class="summary-text">
 					Bite.js is an ultra light-weight, full-featured templating engine designed for size and performance.
-					It produces standalone functions in vanilla JavaScript that can be used to render a template with a
-					given set of data.
+					It compiles templates into standalone functions in vanilla JavaScript that can be used to render the
+					template with a given set of data.
 				</div>
 			</section>
 
@@ -53,12 +53,12 @@
 				<h1 class="section-title">Usage</h1>
 
 				<div class="demo-text">
-					Bite.js generates standalone functions from your templates by calling
-					<code>Bite(&lt;template_string&gt;)</code>. The template string can come from any source, such as
-					a file, ajax call, string literal, or user input.<br>
+					Use Bite.js to compile templates into standalone functions by calling
+					<code>Bite(&lt;template_string&gt;)</code>. The template string can come from any source, such as a
+					file, ajax call, string literal, or user input.<br>
 					<br>
-					The resulting function can then be called with a data contex which will render the template with the
-					data as the current <b>scope</b>. Within the template, the current <b>scope</b> is always accessible
+					The functions can then be called with a data contex with which to evaluate the template. The result
+					is an HTML string. Within the template, the current context, or <b>scope</b>, is always accessible
 					via the <code>$</code> variable. For instance, if your data looks like <code>{name : 'Sam'}</code>,
 					your template can access that variable with <code>$.name</code> and can perform actions on it such
 					as <a href="#interpolation">interpolation</a>.<br>
