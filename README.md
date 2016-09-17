@@ -34,7 +34,9 @@ Template functions can be stored by calling their `toString()` method and saving
 
 #### Interpolation
 
-Interpolation allows you to inject arbitrary values and expressions into your template. The most common use-case is outputting a property such as a name or date, e.g. `{{$.name}}`. However, any valid JavaScript expression is allowed, such as `{{1 + 2 + 3}}`, `{{'Mr. ' + $.last_name}}`, or `{{$.name.toUpperCase()}}`.
+Interpolation allows you to inject arbitrary values and expressions into your template via `{{<expression>}}`. The most common use-case is outputting a property such as a name or date, e.g. `{{$.name}}`. However, any valid JavaScript expression is allowed, such as `{{1 + 2 + 3}}`, `{{'Mr. ' + $.last_name}}`, or `{{$.name.toUpperCase()}}`.
+
+Interpolated values are HTML-escaped by default. If you want to interpolate a value with HTML without escaping, use `{{!<expression>}}`. This is particularly useful when using partials. Use this cautiously, however, as interpolating unsafe strings such as user input can lead to JavaScript injection attacks.
 
 #### If
 
@@ -54,4 +56,4 @@ The `{{#with <expression>}} ... {{/with}}` block allows you to change the curren
 
 #### Partials
 
-Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. See the [demo](https://sinova.github.io/Bite.js/#demo) for a good example.
+Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. Because most partials contain HTML, use the unescaped interpolation syntax `{{!<expression>}}`. See the [demo](https://sinova.github.io/Bite.js/#demo) for a good example.
