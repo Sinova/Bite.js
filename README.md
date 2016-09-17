@@ -46,7 +46,7 @@ The `{{#repeat <number>}} ... {{/repeat}}` block allows you to repeat a subsecti
 
 #### forEach
 
-The `{{#forEach <expression>}} ... {{/forEach}}` block allows you to loop over an array of values and output a subsection of the template. The result of the expression must be an array. Within the block, `i` becomes the current index in the array, `$` becomes the current value, and `$$` becomes the parent scope. You can climb further up the parent scope chain via `$$.$$`, `$$.$$.$$`, and so on.
+The `{{#forEach <expression>}} ... {{/forEach}}` block allows you to loop over an array of values and output a subsection of the template. The result of the expression passed to `#forEach` must be an array. Within the block, `i` becomes the current index in the array, `$` becomes the current value, and `$$` becomes the parent scope. You can climb further up the parent scope chain via `$$.$$`, `$$.$$.$$`, and so on.
 
 #### With
 
