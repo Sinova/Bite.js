@@ -17,7 +17,7 @@
 
 	[
 		[``,        [`e`, `s`], params => `o+=e(s(${params}));`],
-		[`!`,       [`s`],      params => `o+=s(${params});`],
+		[`%`,       [`s`],      params => `o+=s(${params});`],
 		[`if`,      [],         params => `if(${params}){`, `}`],
 		[`elseif`,  [],         params => `}else if(${params}){`],
 		[`else`,    [],         params => `}else{`],
@@ -28,13 +28,13 @@
 
 	function helper(helper, deps, begin, end) {
 		const clean_helper = helper.replace(/([.*+?^=!:${}()|[\]\/\\])/g, `\\$&`);
-		const prefix       = helper && helper !== `!` ? `#` : ``;
-		const space        = helper && helper !== `!` ? `\\s+` : `\\s*`;
+		const prefix       = helper && helper !== `%` ? `#` : ``;
+		const space        = helper && helper !== `%` ? `\\s+` : `\\s*`;
 
 		helpers[helper] = {
 			deps : deps,
 			begin : {
-				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`) : /{{\s*([^#\/!].*?)\s*}}(?!})/g,
+				pattern : helper ? new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`) : /{{\s*([^#\/%].*?)\s*}}(?!})/g,
 				replace : (match, params) => end_concat + begin(params ? params.replace(/\\'/g, `'`) : null) + concat,
 			},
 			end : end ? {
