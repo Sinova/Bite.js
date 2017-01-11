@@ -15,6 +15,7 @@
 	let demo_template = document.getElementById('demo-template');
 	let demo_js       = document.getElementById('demo-js');
 	let demo_output   = document.getElementById('demo-output');
+	let demo_compiled = document.getElementById('demo-compiled');
 
 	demo_template.addEventListener('input', runDemo);
 	demo_js.addEventListener('input', runDemo);
@@ -28,7 +29,9 @@
 		}
 		catch(e) {
 			demo_output.classList.add('error');
-			demo_output.innerHTML = e.message;
+
+			demo_output.innerHTML   = e.message;
+			demo_compiled.innerHTML = '';
 		}
 	}
 
