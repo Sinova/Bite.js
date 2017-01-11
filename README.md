@@ -30,6 +30,7 @@ Template functions can be stored by calling their `toString()` method and saving
 
 ### Example
 
+#### HTML
 ```HTML
 <div id="demo-template" hidden>
 	<h1>{{$.name}}</h1>
@@ -60,6 +61,7 @@ Template functions can be stored by calling their `toString()` method and saving
 <div id="demo-output"></div>
 ```
 
+#### JavaScript
 ```JavaScript
 const data = {
 	name   : 'Sam',
