@@ -217,6 +217,11 @@ code {
 	font-weight: bold;
 }
 
+#demo-template,
+#demo-js {
+	white-space: pre;
+}
+
 #demo-output {
 	padding: 0.5rem;
 	height: 10rem;

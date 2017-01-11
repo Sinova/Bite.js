@@ -82,18 +82,12 @@
 					<div class="demo-section demo-template-container">
 						<div class="demo-title">Template</div>
 						<textarea class="code-block" id="demo-template" spellcheck="false">
-							&lt;h1&gt;
-								{{$.name}}
-							&lt;/h1&gt;
+							&lt;h1&gt;{{$.name}}&lt;/h1&gt;
+
+							&lt;div&gt;{{% $.star_partial({max : $.rating})}}&lt;/div&gt;
 
 							&lt;div&gt;
-								{{% $.star_partial({max : $.rating})}}
-							&lt;/div&gt;
-
-							&lt;div&gt;
-								&lt;h2&gt;
-									Profession
-								&lt;/h2&gt;
+								&lt;h2&gt;Profession&lt;/h2&gt;
 
 								{{#with $.profession}}
 									{{$.name}} ({{$.years}} years)
@@ -101,16 +95,12 @@
 							&lt;/div&gt;
 
 							&lt;div&gt;
-								&lt;h2&gt;
-									Interests ({{$.interests.items.length}})
-								&lt;/h2&gt;
+								&lt;h2&gt;Interests ({{$.interests.items.length}})&lt;/h2&gt;
 
 								&lt;ul&gt;
 									{{#with $.interests}}
 										{{#forEach $.items}}
-											&lt;li&gt;
-												{{$$.$$.name}} {{$$.verb}} {{$}}
-											&lt;/li&gt;
+											&lt;li&gt;{{$$.$$.name}} {{$$.verb}} {{$}}&lt;/li&gt;
 										{{/forEach}}
 									{{/with}}
 								&lt;/ul&gt;
@@ -121,7 +111,7 @@
 					<div class="demo-section demo-js-container">
 						<div class="demo-title">JavaScript</div>
 						<textarea class="code-block" id="demo-js" spellcheck="false">
-							let data = {
+							const data = {
 								name   : 'Sam',
 								rating : 4,
 
@@ -152,9 +142,9 @@
 								`),
 							};
 
-							let output_div      = document.getElementById('demo-output');
-							let template_string = document.getElementById('demo-template').value;
-							let template        = Bite(template_string);
+							const output_div      = document.getElementById('demo-output');
+							const template_string = document.getElementById('demo-template').value;
+							const template        = Bite(template_string);
 
 							output_div.innerHTML = template(data);
 						</textarea>
