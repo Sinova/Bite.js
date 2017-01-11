@@ -22,13 +22,84 @@ npm install bite-templates
 
 ### Usage
 
-> Check out the [demo](https://sinova.github.io/Bite.js/#demo) for a usage example.
-
 Use Bite.js to compile templates into standalone functions by calling `Bite(<template_string>)`. The template string can come from any source, such as a file, ajax call, string literal, or user input.
 
 The functions can then be called with a data contex with which to evaluate the template. The result is an HTML string. Within the template, the current context, or **scope**, is always accessible via the `$` variable. For instance, if your data looks like `{name : 'Sam'}`, your template can access that variable with `$.name` and can perform actions on it such as interpolation.
 
 Template functions can be stored by calling their `toString()` method and saving the resulting string however you wish (file, DB, etc). If you're using Webpack, you can use the [bite-templates-loader](https://github.com/Sinova/bite-templates-loader) package to automatically precompile your templates before sending them to the client.
+
+### Example
+
+```HTML
+<div id="demo-template" hidden>
+	<h1>{{$.name}}</h1>
+
+	<div>{{% $.star_partial({max : $.rating})}}</div>
+
+	<div>
+		<h2>Profession</h2>
+
+		{{#with $.profession}}
+			{{$.name}} ({{$.years}} years)
+		{{/with}}
+	</div>
+
+	<div>
+		<h2>Interests ({{$.interests.items.length}})</h2>
+
+		<ul>
+			{{#with $.interests}}
+				{{#forEach $.items}}
+					<li>{{$$.$$.name}} {{$$.verb}} {{$}}</li>
+				{{/forEach}}
+			{{/with}}
+		</ul>
+	</div>
+</div>
+
+<div id="demo-output"></div>
+```
+
+```JavaScript
+const data = {
+	name   : 'Sam',
+	rating : 4,
+
+	profession : {
+		name  : 'Programmer',
+		years : '6',
+	},
+
+	interests : {
+		verb : 'likes',
+
+		items : [
+			'Chess',
+			'Boxing',
+			'Bite.js',
+		],
+	},
+
+	// Inline partial just for demoing purposes
+	star_partial : Bite(`
+		{{#repeat 5}}
+			{{#if i < $.max}}
+				★
+			{{#else}}
+				☆
+			{{/if}}
+		{{/repeat}}
+	`),
+};
+
+const output_div      = document.getElementById('demo-output');
+const template_string = document.getElementById('demo-template').innerHTML;
+const template        = Bite(template_string);
+
+output_div.innerHTML = template(data);
+```
+
+> Check out the [demo](https://sinova.github.io/Bite.js/#demo) for a live usage example.
 
 ### API
 
@@ -36,7 +107,7 @@ Template functions can be stored by calling their `toString()` method and saving
 
 Interpolation allows you to inject arbitrary values and expressions into your template via `{{<expression>}}`. The most common use-case is outputting a property such as a name or date, e.g. `{{$.name}}`. However, any valid JavaScript expression is allowed, such as `{{1 + 2 + 3}}`, `{{'Mr. ' + $.last_name}}`, or `{{$.name.toUpperCase()}}`.
 
-Interpolated values are HTML-escaped by default. If you want to interpolate a value with HTML without escaping, use `{{%<expression>}}`. This is particularly useful when using partials. Use this cautiously, however, as interpolating unsafe strings such as user input can lead to JavaScript injection attacks.
+Interpolated values are HTML-escaped by default. If you want to interpolate a value with HTML without escaping, use `{{% <expression>}}`. This is particularly useful when using partials. Use this cautiously, however, as interpolating unsafe strings such as user input can lead to JavaScript injection attacks.
 
 #### If
 
@@ -56,4 +127,4 @@ The `{{#with <expression>}} ... {{/with}}` block allows you to change the curren
 
 #### Partials
 
-Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. Because most partials contain HTML, use the unescaped interpolation syntax `{{%<expression>}}`. See the [demo](https://sinova.github.io/Bite.js/#demo) for a good example.
+Partials leverage the fact that interpolation can inject arbitrary expressions. Thus, using a partial is as simple as passing its precompiled function into your template and calling it with your desired data. Because most partials contain HTML, use the unescaped interpolation syntax `{{% <expression>}}`. See the [demo](https://sinova.github.io/Bite.js/#demo) for a good example.
