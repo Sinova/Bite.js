@@ -22,11 +22,8 @@
 	runDemo();
 
 	function runDemo() {
-		let template = demo_template.value;
-		let js       = demo_js.value;
-
-			window.eval(js);
 		try {
+			window.eval(demo_js.value);
 			demo_output.classList.remove('error');
 		}
 		catch(e) {

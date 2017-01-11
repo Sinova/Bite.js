@@ -87,7 +87,7 @@
 							&lt;/h1&gt;
 
 							&lt;div&gt;
-								{{%$.star_partial({max : $.rating})}}
+								{{% $.star_partial({max : $.rating})}}
 							&lt;/div&gt;
 
 							&lt;div&gt;
@@ -121,25 +121,9 @@
 					<div class="demo-section demo-js-container">
 						<div class="demo-title">JavaScript</div>
 						<textarea class="code-block" id="demo-js" spellcheck="false">
-							let input    = document.getElementById('demo-template').value;
-							let output   = document.getElementById('demo-output');
-							let template = Bite(input);
-
-							// Inline template just for the purpose of demoing partials
-							let star_partial = Bite(
-								'{{#repeat 5}}' +
-									'{{#if i < $.max}}' +
-										'★' +
-									'{{#else}}' +
-										'☆' +
-									'{{/if}}' +
-								'{{/repeat}}'
-							);
-
-							output.innerHTML = template({
-								name         : 'Sam',
-								rating       : 4,
-								star_partial : star_partial,
+							let data = {
+								name   : 'Sam',
+								rating : 4,
 
 								profession : {
 									name  : 'Programmer',
@@ -155,7 +139,24 @@
 										'Bite.js',
 									],
 								},
-							});
+
+								// Inline partial just for demoing purposes
+								star_partial : Bite(`
+									{{#repeat 5}}
+										{{#if i < $.max}}
+											★
+										{{#else}}
+											☆
+										{{/if}}
+									{{/repeat}}
+								`),
+							};
+
+							let output_div      = document.getElementById('demo-output');
+							let template_string = document.getElementById('demo-template').value;
+							let template        = Bite(template_string);
+
+							output_div.innerHTML = template(data);
 						</textarea>
 					</div>
 				</div>
@@ -176,7 +177,7 @@
 					<div class="api-content">
 						<code class="api-syntax code-block">
 							{{&lt;expression&gt;}}
-							{{%&lt;html_expression&gt;}}
+							{{% &lt;html_expression&gt;}}
 						</code>
 
 						<div class="api-description">
@@ -187,7 +188,7 @@
 							<code>{{$.name.toUpperCase()}}</code>.<br>
 							<br>
 							Interpolated values are HTML-escaped by default. If you want to interpolate a value with HTML
-							without escaping, use <code>{{%&lt;expression&gt;}}</code>. This is particularly useful when
+							without escaping, use <code>{{% &lt;expression&gt;}}</code>. This is particularly useful when
 							using partials. Use this cautiously, however, as interpolating unsafe strings such as user
 							input can lead to JavaScript injection attacks.
 						</div>
@@ -301,7 +302,7 @@
 
 					<div class="api-content">
 						<code class="api-syntax code-block">
-							{{%$.my_partial($.my_data)}}
+							{{% $.my_partial($.my_data)}}
 						</code>
 
 						<div class="api-description">
@@ -311,7 +312,7 @@
 							template and calling it with your desired data.
 							Because most partials contain HTML, use the
 							unescaped interpolation syntax
-							<code>{{%&lt;expression&gt;}}</code>.
+							<code>{{% &lt;expression&gt;}}</code>.
 						</div>
 					</div>
 				</section>
