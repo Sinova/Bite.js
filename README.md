@@ -26,7 +26,10 @@ Compile templates into standalone functions by calling <code>Bite(my_template_st
 
 ### Example
 
-The following is a simple example on how Bite can be used. This example tries to showcase all features, so it may look a bit contrived.
+The following is a simple example of how Bite can be used. You can also check out the [live demo](https://sinova.github.io/Bite.js/#demo).
+
+> This example tries to showcase all features, so it may look a bit contrived.
+
 
 ##### HTML
 ```Handlebars
@@ -92,8 +95,6 @@ const template        = Bite(template_string);
 output_div.innerHTML = template(data);
 ```
 
-> Check out the [demo](https://sinova.github.io/Bite.js/#demo) for a live usage example.
-
 ### Scopes
 
 Within a template, the current context, or **scope**, is always accessible via the <code>$</code> variable. For instance, if your data looks like <code>{name : 'Sam'}</code>, your template can access that variable with <code>$.name</code> and can perform actions on it such as interpolation.
@@ -116,9 +117,21 @@ If you're using Webpack, you can use the [bite-templates-loader](https://github.
 			<br>
 		</td>
 		<td>
-			Interpolation allows you to inject arbitrary values and expressions into your template. The most common use-case is outputting a property such as a name or date, e.g. <code>{{$.name}}</code>. However, any valid JavaScript expression is allowed, such as <code>{{1&nbsp;+&nbsp;2&nbsp;+&nbsp;3}}</code>, <code>{{'Mr.&nbsp;'&nbsp;+&nbsp;$.last_name}}</code>, or <code>{{$.name.toUpperCase()}}</code>.<br>
+			Interpolation allows you to inject arbitrary values and expressions into your template. The most common use-case is outputting a property such as a name or date, e.g. <code>{{$.name}}</code>. However, any valid JavaScript expression is allowed, such as <code>{{1&nbsp;+&nbsp;2&nbsp;+&nbsp;3}}</code>, <code>{{'Mr.&nbsp;'&nbsp;+&nbsp;$.last_name}}</code>, or <code>{{$.name.toUpperCase()}}</code>.
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h3>Unescaped Interpolation</h3>
+			{{%&nbsp;&lt;expression&gt;}}<br>
 			<br>
-			Interpolated values are HTML-escaped by default. If you want to interpolate a value with HTML without escaping, use <code>{{%&nbsp;&lt;expression&gt;}}</code>. This is particularly useful when using partials. Use this cautiously, however, as interpolating unsafe strings such as user input can lead to JavaScript injection attacks.
+		</td>
+		<td>
+			By default, interpolated values are HTML-escaped. If you want to interpolate a value without escaping, use <code>{{%&nbsp;&lt;expression&gt;}}</code>. This is particularly useful when using partials (see below).<br>
+			<br>
+			<blockquote>
+				<b>Caution:</b> Interpolating untrusted strings such as user input can lead to potential injection attacks. Use wisely!
+			</blockquote>
 		</td>
 	</tr>
 	<tr>
