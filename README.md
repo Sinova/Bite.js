@@ -102,7 +102,7 @@ The parent scope can be accessed with <code>$$</code>. For example, to output a 
 
 ### Pre-Compilation
 
-Templates can be pre-compiled into functions on the server within your Node.js application. Calling <code>toString()</code> on a compiled template function will output the function body as a string which can then be saved however you wish (file, database, etc). These strings can be sent straight to the client as either a standalone JavaScript file or as part of other source files depending on your build workflow.
+Templates can be pre-compiled into functions on the server within your Node.js application. Calling <code>toString()</code> on a compiled template function will return a string which can then be saved however you wish (file, database, etc). These strings can be sent straight to the client as either a standalone JavaScript file or as part of other source files depending on your build workflow.
 
 If you're using Webpack, you can use the [bite-templates-loader](https://github.com/Sinova/bite-templates-loader) package to automatically precompile your templates before sending them to the client.
 
