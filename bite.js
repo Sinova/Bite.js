@@ -7,7 +7,7 @@
 
 	const utilities = {
 		s : `$=>$||$===0?$+'':''`, // String
-		e : `$=>('&<>="\`\\''.split('').map(x=>$=$.replace(new RegExp(x,'g'),\`&#\${x.charCodeAt(0)};\`)),$)`, // Escape HTML
+		e : `$=>('&<>="\`\\''.split('').map(e=>$=$.replace(new RegExp(e,'g'),\`&#\${e.charCodeAt(0)};\`)),$)`, // Escape HTML
 		r : `$=>[...new Array(+$).keys()]`, // Repeat generator
 		c : `()=>($.$$=$$,$$=$)`, // Child scope
 		p : `()=>($=$$,$$=$.$$,$.$$=void 0,'')`, // Parent scope
