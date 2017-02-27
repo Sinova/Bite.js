@@ -7,7 +7,7 @@
 
 	const utilities = {
 		s : `$=>$||$===0?$+'':''`, // String
-		e : `$=>('&<>="\`\\''.split('').map(e=>$=$.replace(new RegExp(e,'g'),\`&#\${e.charCodeAt(0)};\`)),$)`, // Escape HTML
+		e : `$=>$.replace(/[&<>="\`']/g,c=>\`&#\${c.charCodeAt()};\`)`, // Escape HTML
 		r : `$=>[...new Array(+$).keys()]`, // Repeat generator
 		c : `()=>($.$$=$$,$$=$)`, // Child scope
 		p : `()=>($=$$,$$=$.$$,$.$$=void 0,'')`, // Parent scope
@@ -22,7 +22,7 @@
 		[`repeat`,  [`r`],      params => `\${r(${params}).map((i)=>\``, `\`).join('')}`],
 		[`forEach`, [`c`, `p`], params => `\${c(),${params}.map(($,i)=>\``, `\`).join('')}\${p()}`],
 		[`with`,    [`c`, `p`], params => `\${c(),$=${params},''}`, `\${p()}`],
-	].forEach(definition => helper.apply(null, definition));
+	].forEach(definition => helper(...definition));
 
 	function helper(helper, deps, begin, end) {
 		const clean_helper = helper.replace(/([.*+?^=!:${}()|[\]\/\\])/g, `\\$&`);
