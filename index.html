@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Bite.js: JavaScript Templating</title>
+		<link rel="stylesheet" type="text/css" href="demo/colorcoded.css">
+		<link rel="stylesheet" type="text/css" href="demo/demo.css">
+	</head>
+	<body>
+		<header class="page-header">
+			<h1 class="page-title">Bite.js</h1>
+			<h2 class="page-subtitle">Tiny, Dependecy-Free JavaScript Templating</h2>
+
+			<a class="github-button button" href="https://github.com/Sinova/Bite.js">View on GitHub</a>
+		</header>
+
+		<div class="page-content">
+			<section>
+				<h1 class="section-title">Overview</h1>
+
+				<div class="section-content">
+					Bite.js is an ultra light-weight, full-featured templating engine designed for size and performance.
+					It compiles templates into standalone functions in vanilla JavaScript that can be used to render
+					those templates with a given set of data.
+				</div>
+			</section>
+
+			<section>
+				<h1 class="section-title">Features</h1>
+
+				<div class="section-content">
+					<ul class="feature-list">
+						<li>Interpolation</li>
+						<li>Conditionals</li>
+						<li>Iteration</li>
+						<li>Parent/Child Scoping</li>
+						<li>Arbitrary Expressions</li>
+						<li>Precompilation or Run-Time Compilation</li>
+						<li>Partials</li>
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<h1 class="section-title">Installation</h1>
+
+				<div class="section-content">
+					<code class="code-block">
+						npm install bite-templates
+					</code>
+				</div>
+			</section>
+
+			<section id="usage">
+				<h1 class="section-title">Usage</h1>
+
+				<div class="section-content">
+					<p>Here is a simple example of how to compile and render a template.</p>
+
+					<code class="code-block foo">const render = Bite('Hello, {{$.name}}!');
+const result = render({name : 'Sam'});
+
+console.log(result); // Hello, Sam!</code>
+
+					<p>
+						By default, rendering a template with data returns a string.
+						Passing <i>true</i> as the second parameter to the render function will return a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment" target="_blank">DocumentFragment</a>.
+						This allows you to perform more complicated work on the DOM nodes such as adding event listeners.
+					</p>
+
+					<code class="code-block">const render = Bite('Hello, {{$.name}}!');
+const result = render({name : 'Sam'}, true);
+
+console.log(result); // [object DocumentFragment]
+document.body.appendChild(result);</code>
+
+					<p>Now that we know how to compile and render templates, let's look at a more complicated example:</p>
+
+					<code class="code-block">const template = `
+	{{#if ($.num1 + $.num2) % 2}}
+		The sum is &lt;b&gt;odd&lt;/b&gt;.
+	{{#else}}
+		The sum is &lt;b&gt;even&lt;/b&gt;.
+	{{/if}}
+`;
+
+const render = Bite(template);
+const result = render({num1 : 10, num2 : 4});
+
+console.log(result); // The sum is &lt;b&gt;even&lt;/b&gt;.</code>
+
+					<p>Here we demonstrate that arbitrary expressions can be evaluated within templates. Additionally, these expressions can be used within conditionals to determine what gets displayed.</p>
+
+					<p>Bite.js offers quite a few powerful features that allow you to control what gets rendered. Check out the <a href="#template-api">Template API</a> for a full list of features. You can also view and edit the <a href="#demo">live demo</a>.</p>
+				</div>
+			</section>
+
+			<section>
+				<h1 class="section-title">Scopes</h1>
+
+				<div class="section-content">
+					<p>
+						Within a template, the current context, or <i>scope</i>, is always accessible via the <code>$</code> variable.
+						For instance, if your data looks like <code>{name : 'Sam'}</code>, your template can access that variable
+						with <code>$.name</code> and can perform actions on it such as <a href="#interpolation">interpolation</a>.
+					</p>
+
+					<p>
+						Within <a href="#with"><code>{{#with &lt;expression&gt;}}</code></a> blocks, the scope is changed to the result of the expression passed to it.
+						Similarly, within <a href="#forEach"><code>{{#forEach &lt;array&gt;}}</code></a> blocks, the scope is changed to the current item in the array.
+						In these cases, you can access the parent scope with <code>$$</code>.
+						For example, to output a property from the parent scope you use <code>{{$$.example}}</code>.
+						You can climb further up the parent scope chain via <code>$$.$$</code>, <code>$$.$$.$$</code>, and so on.
+						For example: <code>{{$$.$$.example}}</code>
+					</p>
+				</div>
+			</section>
+
+			<section id="partials">
+				<h1 class="section-title">Partials</h1>
+
+				<div class="section-content">
+					<p>
+						Partials are templates included inside of other templates.
+						This functionality is implemented inherently via <a href="#html-interpolation">HTML Interpolation</a>.
+						HTML Interpolation supports both raw HTML and DOM nodes, so you can use both the string and DocumentFragment forms of the partial's render function.
+					</p>
+
+					<p>
+						Partials can be more easily explained via example:
+					</p>
+
+					<code class="code-block">const render  = Bite('Hello, {{$.name}}! {{% $.reverse_partial({first_name : $.name})}}');
+const partial = Bite('Your name reversed is: {{$.first_name.reverse()}}!');
+
+const result = render({
+	name            : 'Sam',
+	reverse_partial : partial,
+});
+
+console.log(result); // Hello, Sam! Your name reversed is: maS!</code>
+				</div>
+			</section>
+
+			<section>
+				<h1 class="section-title">Pre-Compilation</h1>
+
+				<div class="section-content">
+					<p>
+						Templates can be pre-compiled into functions on the server within your Node.js application.
+						Calling <code>toString()</code> on a compiled template function will return a string which can then be saved however you wish (file, database, etc).
+						These strings can be sent straight to the client as either a standalone JavaScript file or as part of other source files depending on your build workflow.
+					</p>
+
+					<p>
+						If you're using Webpack, you can use the <a href="https://github.com/Sinova/bite-templates-loader" target="_blank">bite-templates-loader</a> package to automatically precompile your templates before sending them to the client.
+					</p>
+				</div>
+			</section>
+
+			<section id="template-api">
+				<h1 class="section-title">Template API</h1>
+
+				<div class="section-content">
+					<table class="api-table">
+						<tr id="interpolation">
+							<th>
+								<h3>Interpolation</h3>
+								<code>{{&lt;expression&gt;}}</code>
+							</th>
+							<td>
+								<b>Interpolation</b> allows you to inject arbitrary values and expressions into your template.
+								The most common use-case is outputting a property such as a name or date, e.g. <code>{{$.name}}</code>.
+								However, any valid JavaScript expression is allowed, such as <code>{{1 + 2 + 3}}</code>, <code>{{'Mr. ' + $.last_name}}</code>, or <code>{{$.name.toUpperCase()}}</code>.
+
+								<blockquote>
+									<b>Note:</b> Interpolated values are HTML-escaped to avoid injection attacks.
+									If you need to inject HTML without escaping, see <a href="#html-interpolation">HTML Interpolation</a>.
+								</blockquote>
+							</td>
+						</tr>
+						<tr id="html-interpolation">
+							<th>
+								<h3>HTML Interpolation</h3>
+								<code>{{% &lt;expression&gt;}}</code>
+							</th>
+							<td>
+								<b>HTML Interpolation</b> allows you to inject arbitrary values and expressions into your template <i>without</i> HTML-escaping them.
+								This can also be used to inject DOM nodes instead of HTML strings (see the <a href="#partials">partials section</a> for more information).
+
+								<blockquote>
+									<b>Caution:</b> HTML Interpolating untrusted strings and DOM nodes can lead to potential injection attacks. Use wisely!
+								</blockquote>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<h3>If</h3>
+								<code>{{#if &lt;expression&gt;}}
+	...
+{{#elseif &lt;expression&gt;}}
+	...
+{{#else}}
+	...
+{{/if}}</code>
+							</th>
+							<td>
+								The <b>if</b> block allows you to control the flow of your code by testing certain conditions.
+								Within the block, <code>{{#elseif &lt;expression&gt;}}</code> and <code>{{#else}}</code> blocks can optionally be used.
+								Any valid JavaScript expression can be used with <code>#if</code> and <code>#elseif</code>.
+							</td>
+						</tr>
+						<tr id="repeat">
+							<th>
+								<h3>Repeat</h3>
+								<code>{{#repeat &lt;number&gt;}}
+	...
+{{/repeat}}</code>
+							</th>
+							<td>
+								The <b>repeat</b> block allows you to repeat a subsection of the template a given number of times.
+								Within the block, <code>i</code> becomes the current iteration counter.
+								<code>#repeat</code> behaves like a standard <code>for</code> loop, starting with 0 and counting up to, but not including, the target number.
+							</td>
+						</tr>
+						<tr id="forEach">
+							<th>
+								<h3>ForEach</h3>
+								<code>{{#forEach &lt;array&gt;}}
+	...
+{{/forEach}}</code>
+							</th>
+							<td>
+								The <b>forEach</b> block allows you to loop over an array of values and output a subsection of the template.
+								The result of the expression passed to <code>#forEach</code> must be an array.
+								Within the block, <code>i</code> becomes the current index in the array, <code>$</code> becomes the current value, and <code>$$</code> becomes the parent scope.
+								You can climb further up the parent scope chain via <code>$$.$$</code>, <code>$$.$$.$$</code>, and so on.
+							</td>
+						</tr>
+						<tr id="with">
+							<th>
+								<h3>With</h3>
+								<code>{{#with &lt;expression&gt;}}
+	...
+{{/with}}</code>
+							</th>
+							<td>
+								The <b>with</b> block allows you to change the current scope within the template.
+								<code>$</code> becomes the value of the expression passed to the block, and <code>$$</code> becomes the parent scope.
+								You can climb further up the parent scope chain via <code>$$.$$</code>, <code>$$.$$.$$</code>, and so on.
+							</td>
+						</tr>
+					</table>
+				</div>
+			</section>
+
+			<section id="demo">
+				<h1 class="section-title">Demo</h1>
+
+				<div class="section-content">
+					<p>Here is a live, editable demo showing use of all the features Bite.js has to offer. Feel free to experiment.</p>
+
+					<div class="demo-columns">
+						<div class="demo-section">
+							<div class="demo-title">Template</div>
+							<textarea class="code-block" id="demo-template" spellcheck="false">
+								&lt;h1&gt;{{$.name}}&lt;/h1&gt;
+
+								&lt;h2&gt;Profession&lt;/h2&gt;
+
+								{{#with $.profession}}
+									&lt;div&gt;{{$.name}} for {{$.years}} years&lt;/div&gt;
+									&lt;div&gt;{{% $$.star_partial({max : $.rating})}}&lt;/div&gt;
+								{{/with}}
+
+								{{#with $.interests}}
+									&lt;h2&gt;Interests ({{$.items.length}})&lt;/h2&gt;
+
+									&lt;ul&gt;
+										{{#forEach $.items}}
+											&lt;li&gt;{{$$.$$.name}} {{$$.verb}} {{$}}&lt;/li&gt;
+										{{/forEach}}
+									&lt;/ul&gt;
+								{{/with}}
+							</textarea>
+						</div>
+
+						<div class="demo-section demo-js-container">
+							<div class="demo-title">JavaScript</div>
+							<textarea class="code-block" id="demo-js" spellcheck="false">
+								var data = {
+									name : 'Sam',
+
+									profession : {
+										name   : 'Programmer',
+										years  : '6',
+										rating : 4,
+									},
+
+									interests : {
+										verb : 'likes',
+
+										items : [
+											'Chess',
+											'Boxing',
+											'Bite.js',
+										],
+									},
+
+									// Inline partial just for demoing purposes
+									star_partial : Bite(`
+										{{#repeat 5}}
+											{{#if i < $.max}}
+												★
+											{{#else}}
+												☆
+											{{/if}}
+										{{/repeat}}
+									`),
+								};
+
+								var render = Bite(template);
+
+								output.innerHTML = render(data);
+							</textarea>
+						</div>
+					</div>
+
+					<div class="demo-section">
+						<div class="demo-title">Output</div>
+						<div id="demo-output"></div>
+					</div>
+
+					<div class="demo-section">
+						<div class="demo-title">Compiled Function</div>
+						<code id="demo-compiled"></code>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<script src="bite.js"></script>
+		<script src="demo/colorcoded.js"></script>
+		<script src="demo/demo.js"></script>
+	</body>
+</html>
