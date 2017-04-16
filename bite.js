@@ -35,7 +35,7 @@
 			deps : deps,
 			begin : {
 				pattern : new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`),
-				replace : (match, params) => begin(params ? params.replace(/\\'/g, `'`) : null),
+				replace : (match, params) => begin(params ? params.replace(/\\`/g, '`') : null),
 			},
 			end : end ? {
 				pattern : new RegExp(`{{/${clean_helper}}}`, `gi`),
