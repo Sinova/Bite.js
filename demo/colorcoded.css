@@ -1,0 +1,68 @@
+.colorcoded {
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: #252525 !important;
+	color: #85DCFF !important;
+}
+
+.colorcoded-comment {
+	color: #408A37;
+}
+
+.colorcoded-string {
+	color: #E6A075;
+}
+
+.colorcoded-keyword {
+	color: #0087CA;
+}
+
+.colorcoded-function {
+	color: #EADA9A;
+}
+
+.colorcoded-brace {
+	color: #AAA;
+}
+
+.colorcoded-operator {
+	color: #DDD;
+}
+
+.colorcoded-number {
+	color: #8DBF91;
+}
+
+.colorcoded-wrapper {
+	position: relative !important;
+	display: inline-block !important;
+}
+
+.colorcoded-highlighter {
+	position: absolute !important;
+	z-index: 0 !important;
+	top: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	width: auto !important;
+	height: auto !important;
+	-webkit-text-fill-color: unset !important;
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+}
+
+.colorcoded-sizer {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.colorcoded-textarea {
+	position: relative !important;
+	z-index: 1 !important;
+	background: transparent !important;
+	color: #FFF !important;
+	-webkit-text-fill-color: transparent !important;
+}

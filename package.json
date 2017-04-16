@@ -1,0 +1,21 @@
+{
+  "name": "bite-templates",
+  "version": "3.0.0",
+  "description": "Tiny, Dependecy-Free JavaScript Templating",
+  "main": "bite.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sinova/Bite.js.git"
+  },
+  "keywords": [
+    "bite",
+    "template",
+    "html"
+  ],
+  "author": "Samuel Hodge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sinova/Bite.js/issues"
+  },
+  "homepage": "https://sinova.github.io/Bite.js/"
+}
