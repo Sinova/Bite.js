@@ -35,7 +35,7 @@
 			deps : deps,
 			begin : {
 				pattern : new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`),
-				replace : (match, params) => begin(params ? params.replace(/\\`/g, '`') : null),
+				replace : (match, params) => begin(params ? params.replace(/\\`/g, '`').replace(/\\\$\{/g, '${') : null),
 			},
 			end : end ? {
 				pattern : new RegExp(`{{/${clean_helper}}}`, `gi`),
@@ -45,7 +45,7 @@
 	}
 
 	function bite(body) {
-		body = (body || body === 0 ? body + `` : ``).replace(/`/g, '\\`');
+		body = (body || body === 0 ? body + `` : ``).replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
 
 		const deps_map = {};
 		let deps       = ``;
