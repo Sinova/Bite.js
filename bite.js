@@ -34,7 +34,7 @@
 		helpers[helper] = {
 			deps : deps,
 			begin : {
-				pattern : new RegExp(`{{${prefix}${clean_helper}(?:${space}(.+?))?\\s*}}(?!})`, `gi`),
+				pattern : new RegExp(`{{${prefix}${clean_helper}(?:${space}([\\s\\S]+?))?\\s*}}(?!})`, `gi`),
 				replace : (match, params) => begin(params ? params.replace(/\\`/g, '`').replace(/\\\$\{/g, '${') : null),
 			},
 			end : end ? {
