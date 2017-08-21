@@ -92,7 +92,7 @@
 				$ = document.createElement('div'),
 				$.innerHTML = body,
 				[...$.childNodes].forEach($ => fragment.appendChild($)),
-				nodes.forEach((node, i) => (i = fragment.querySelector(\`bite-node#bite--\${i}\`), i.parentNode.insertBefore(node, i), i.parentNode.removeChild(i))),
+				nodes.forEach((node, i) => (i = fragment.querySelector(\`bite-node#bite--\${i}\`), i.parentNode.replaceChild(node, i))),
 				fragment
 			) : body;
 		`;
