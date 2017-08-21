@@ -8,7 +8,7 @@
 	const utilities = {
 		string : `$ => $ && $.nodeName ? $.outerHTML || [...$.childNodes].map(node => node.outerHTML).join('') : $ || $ === 0 ? $ + '' : ''`,
 		escape : `$ => $.replace(/[&<>="\`']/g, c => \`&#\${c.charCodeAt()};\`)`,
-		html   : `$ => fragment && $ && $.nodeName ? (nodes.push($), \`<br id="bite--\${nodes.length - 1}">\`) : string($)`,
+		html   : `$ => fragment && $ && $.nodeName ? (nodes.push($), \`<bite-node id="bite--\${nodes.length - 1}"></bite-node>\`) : string($)`,
 		repeat : `$ => [...new Array(+$).keys()]`,
 		child  : `() => ($.$$ = $$, $$ = $)`,
 		parent : `() => ($ = $$, $$ = $.$$, $.$$ = void 0, '')`,
@@ -92,7 +92,7 @@
 				$ = document.createElement('div'),
 				$.innerHTML = body,
 				[...$.childNodes].forEach($ => fragment.appendChild($)),
-				nodes.forEach((node, i) => fragment.getElementById(\`bite--\${i}\`).replaceWith(node)),
+				nodes.forEach((node, i) => (i = fragment.querySelector(\`bite-node#bite--\${i}\`), i.parentNode.insertBefore(node, i), i.parentNode.removeChild(i))),
 				fragment
 			) : body;
 		`;
