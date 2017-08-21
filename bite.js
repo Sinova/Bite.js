@@ -88,7 +88,7 @@
 			const ${deps}nodes = [], body = \`${body}\`;
 
 			return fragment ? (
-				fragment = new DocumentFragment(),
+				fragment = document.createDocumentFragment(),
 				$ = document.createElement('div'),
 				$.innerHTML = body,
 				[...$.childNodes].forEach($ => fragment.appendChild($)),
